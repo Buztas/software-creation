@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Tournaments</title>
+</head>
+<body>
+<h1>Tournaments</h1>
+<a href="/ui/tournaments/add">Add Tournament</a>
+<ul>
+    <li th:each="tournament : ${tournaments}">
+        <a th:href="@{/ui/tournaments/{id}(id=${tournament.id})}" th:text="${tournament.name}">Tournament Name</a>
+        <a th:href="@{/ui/tournaments/edit/{id}(id=${tournament.id})}">Edit</a>
+        <a th:href="@{/ui/tournaments/delete/{id}(id=${tournament.id})}" onclick="return confirm('Are you sure?')">Delete</a>
+    </li>
+</ul>
+</body>
+</html>

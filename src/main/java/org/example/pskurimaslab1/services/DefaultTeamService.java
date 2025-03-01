@@ -4,8 +4,8 @@ import org.example.pskurimaslab1.model.Team;
 import org.example.pskurimaslab1.model.Tournament;
 import org.example.pskurimaslab1.mappers.TeamMapper;
 import org.example.pskurimaslab1.repositories.TeamRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -21,21 +21,25 @@ public class DefaultTeamService implements TeamService {
     }
 
     @Override
+    @Transactional
     public void addTeam(Team team) {
         teamMapper.insertTeam(team);
     }
 
     @Override
+    @Transactional
     public void addTeamToTournament(long teamId, long tournamentId) {
         teamMapper.addTeamToTournament(teamId, tournamentId);
     }
 
     @Override
+    @Transactional
     public void deleteTeam(Team team) {
         teamRepository.delete(team);
     }
 
     @Override
+    @Transactional
     public void updateTeam(Team team) {
         teamRepository.save(team);
     }

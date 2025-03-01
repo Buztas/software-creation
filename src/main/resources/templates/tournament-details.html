@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Tournament Details</title>
+</head>
+<body>
+<h1 th:text="${tournament.name}">Tournament Name</h1>
+<h3>Teams in this tournament:</h3>
+<ul>
+    <li th:each="team : ${teams}" th:text="${team.name}">Team Name</li>
+</ul>
+<a href="/ui/tournaments">Back to Tournaments</a>
+</body>
+</html>

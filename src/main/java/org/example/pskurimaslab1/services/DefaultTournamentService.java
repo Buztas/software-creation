@@ -5,6 +5,7 @@ import org.example.pskurimaslab1.model.Tournament;
 import org.example.pskurimaslab1.mappers.TournamentMapper;
 import org.example.pskurimaslab1.repositories.TournamentRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -20,28 +21,31 @@ public class DefaultTournamentService implements TournamentService {
     }
 
     @Override
+    @Transactional
     public void addTournament(Tournament tournament) {
         tournamentMapper.insertTournament(tournament);
     }
 
     @Override
+    @Transactional
     public void removeFromTournament(Tournament tournament) {
         tournamentRepository.delete(tournament);
     }
 
     @Override
+    @Transactional
     public void updateTournament(Tournament tournament) {
         tournamentRepository.save(tournament);
     }
 
     @Override
     public Tournament getTournament(long id) {
-        return tournamentMapper.getTournament(id);
+        return tournamentMapper.getTournamentById(id);
     }
 
     @Override
     public List<Tournament> getTournaments() {
-        return tournamentMapper.getTournaments();
+        return tournamentMapper.getAllTournaments();
     }
 
     @Override

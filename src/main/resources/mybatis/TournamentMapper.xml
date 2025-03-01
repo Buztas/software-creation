@@ -1,3 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.example.pskurimaslab1.mappers.TournamentMapper">
     <insert id="insertTournament" parameterType="org.example.pskurimaslab1.model.Tournament" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO tournament (name, sport, start_date, end_date, winner)
@@ -14,7 +18,7 @@
         SELECT id, name, sport, start_date as startDate, end_date as endDate, winner FROM tournament
     </select>
 
-    <select id="getTeamsByTournamentId" parameterType="long" resultType="org.example.pskurimaslab1.model.Team">
+    <select id="getAllTeamsByTournamentId" parameterType="long" resultType="org.example.pskurimaslab1.model.Team">
         SELECT t.id, t.name, t.sport
         FROM team t
         JOIN team_tournament tt ON t.id = tt.team_id

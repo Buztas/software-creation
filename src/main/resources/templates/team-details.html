@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Team Details</title>
+</head>
+<body>
+<h1>Team Details</h1>
+<p><strong>ID:</strong> <span th:text="${team.id}"></span></p>
+<p><strong>Name:</strong> <span th:text="${team.name}"></span></p>
+<p><strong>Sport:</strong> <span th:text="${team.sport}"></span></p>
+
+<h2>Players</h2>
+<table border="1">
+    <thead>
+    <tr>
+        <th>Player ID</th>
+        <th>Player Name</th>
+        <th>Position</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="player : ${team.players}">
+        <td th:text="${player.id}"></td>
+        <td th:text="${player.name}"></td>
+        <td th:text="${player.surname}"></td>
+        <td th:text="${player.age}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<h2>Tournaments</h2>
+<ul>
+    <li th:each="tournament : ${team.tournaments}" th:text="${tournament.name}"></li>
+</ul>
+
+<br>
+<a th:href="@{/ui/teams}">Back to Teams</a>
+</body>
+</html>

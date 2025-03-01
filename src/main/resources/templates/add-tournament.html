@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Add Tournament</title>
+</head>
+<body>
+<h1>Add a New Tournament</h1>
+<form action="#" th:action="@{/ui/tournaments/add}" th:object="${tournament}" method="post">
+    <label>Name: <input type="text" th:field="*{name}" required /></label><br>
+    <button type="submit">Add Tournament</button>
+</form>
+<a href="/ui/tournaments">Back to List</a>
+</body>
+</html>

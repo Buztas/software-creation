@@ -3,8 +3,8 @@ package org.example.pskurimaslab1.services;
 import org.example.pskurimaslab1.model.Player;
 import org.example.pskurimaslab1.mappers.PlayerMapper;
 import org.example.pskurimaslab1.repositories.PlayerRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -30,21 +30,25 @@ public class DefaultPlayerService implements PlayerService {
     }
 
     @Override
+    @Transactional
     public void addPlayer(Player player) {
         playerMapper.insertPlayer(player);
     }
 
     @Override
+    @Transactional
     public void removePlayer(long id) {
         playerRepository.deleteById(id);
     }
 
     @Override
+    @Transactional
     public void removeAllPlayers() {
         playerRepository.deleteAll();
     }
 
     @Override
+    @Transactional
     public void updatePlayer(Player player) {
         playerRepository.save(player);
     }

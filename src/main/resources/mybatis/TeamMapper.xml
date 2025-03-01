@@ -1,3 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.example.pskurimaslab1.mappers.TeamMapper">
     <insert id="insertTeam" parameterType="org.example.pskurimaslab1.model.Team" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO team (name, sport)
@@ -5,7 +9,7 @@
     </insert>
 
     <select id="getTeamById" parameterType="long" resultType="org.example.pskurimaslab1.model.Team">
-        SELECT id, name, sport FROM team WHERE id = #{id}
+        SELECT id, name, sport, players, tournaments FROM team WHERE id = #{id}
     </select>
 
     <select id="getAllTeams" resultType="org.example.pskurimaslab1.model.Team">

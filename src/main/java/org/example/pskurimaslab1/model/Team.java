@@ -12,10 +12,10 @@ public class Team {
     private String name;
     private String sport;
 
-    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Player> players;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "team_tournament",
             joinColumns = @JoinColumn(name = "team_id"),
