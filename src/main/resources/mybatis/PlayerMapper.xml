@@ -1,0 +1,38 @@
+<mapper namespace="org.example.pskurimaslab1.mappers.PlayerMapper">
+    <insert id="insertPlayer" parameterType="org.example.pskurimaslab1.model.Player" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO player(name, surname, age, team_id)
+        VALUES(#{name}, #{surname}, #{age}, #{team.id})
+    </insert>
+
+    <select id="getPlayerById" parameterType="long" resultMap="playerResultMap">
+        SELECT p.id, p.name, p.surname, p.age, t.id as team_id, t.name as team_name, t.sport as team_sport
+        FROM player p
+        JOIN team t ON p.team_id = t.id
+        WHERE p.id = #{id}
+    </select>
+
+    <select id="getAllPlayers" resultMap="playerResultMap">
+        SELECT p.id, p.name, p.surname, p.age, t.id as team_id, t.name as team_name, t.sport as team_sport
+        FROM player p
+        JOIN team t ON p.team_id = t.id
+    </select>
+
+    <select id="getPlayersByTeamId" parameterType="long" resultMap="playerResultMap">
+        SELECT p.id, p.name, p.surname, p.age, t.id as team_id, t.name as team_name, t.sport as team_sport
+        FROM player p
+        JOIN team t ON p.team_id = t.id
+        WHERE t.id = #{teamId}
+    </select>
+
+    <resultMap>
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="surname" column="surname"/>
+        <result property="age" column="age"/>
+        <association property="team" javaType="org.example.pskurimaslab1.model.Team">
+            <id property="id" column="team_id"/>
+            <result property="name" column="team_name"/>
+            <result property="sport" column="team_sport"/>
+        </association>
+    </resultMap>
+</mapper>

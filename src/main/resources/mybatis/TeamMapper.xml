@@ -1,0 +1,26 @@
+<mapper namespace="org.example.pskurimaslab1.mappers.TeamMapper">
+    <insert id="insertTeam" parameterType="org.example.pskurimaslab1.model.Team" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO team (name, sport)
+        VALUES (#{name}, #{sport})
+    </insert>
+
+    <select id="getTeamById" parameterType="long" resultType="org.example.pskurimaslab1.model.Team">
+        SELECT id, name, sport FROM team WHERE id = #{id}
+    </select>
+
+    <select id="getAllTeams" resultType="org.example.pskurimaslab1.model.Team">
+        SELECT id, name, sport FROM team
+    </select>
+
+    <insert id="addTeamToTournament">
+        INSERT INTO team_tournament (team_id, tournament_id)
+        VALUES (#{teamId}, #{tournamentId})
+    </insert>
+
+    <select id="getTournamentsByTeamId" parameterType="long" resultType="org.example.pskurimaslab1.model.Tournament">
+        SELECT t.id, t.name, t.sport, t.start_date as startDate, t.end_date as endDate, t.winner
+        FROM tournament t
+        JOIN team_tournament tt ON t.id = tt.tournament_id
+        WHERE tt.team_id = #{teamId}
+    </select>
+</mapper>
