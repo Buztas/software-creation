@@ -20,13 +20,13 @@ public class DefaultPlayerService implements PlayerService {
     }
 
     @Override
-    public Player getPlayer(long id) {
-        return playerMapper.getPlayerById(id);
+    public Player getPlayer(Long id) {
+        return playerRepository.findPlayerById(id);
     }
 
     @Override
     public List<Player> getPlayers() {
-        return playerMapper.getAllPlayers();
+        return playerRepository.findAll();
     }
 
     @Override
@@ -37,8 +37,8 @@ public class DefaultPlayerService implements PlayerService {
 
     @Override
     @Transactional
-    public void removePlayer(long id) {
-        playerRepository.deleteById(id);
+    public void removePlayer(Long id) {
+        playerMapper.deletePlayer(id);
     }
 
     @Override
@@ -50,11 +50,11 @@ public class DefaultPlayerService implements PlayerService {
     @Override
     @Transactional
     public void updatePlayer(Player player) {
-        playerRepository.save(player);
+        playerMapper.updatePlayer(player);
     }
 
     @Override
-    public List<Player> getPlayersByTeam(long teamId) {
-        return playerMapper.getPlayersByTeamId(teamId);
+    public List<Player> getPlayersByTeam(Long teamId) {
+        return playerRepository.findPlayersByTeamId(teamId);
     }
 }

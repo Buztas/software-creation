@@ -8,23 +8,35 @@
         VALUES (#{name}, #{sport})
     </insert>
 
-    <select id="getTeamById" parameterType="long" resultType="org.example.pskurimaslab1.model.Team">
-        SELECT id, name, sport, players, tournaments FROM team WHERE id = #{id}
-    </select>
+    <update id="updateTeam" parameterType="org.example.pskurimaslab1.model.Team">
+        UPDATE team
+        SET name = #{name},
+            sport = #{sport}
+        WHERE id = #{id}
+    </update>
 
-    <select id="getAllTeams" resultType="org.example.pskurimaslab1.model.Team">
-        SELECT id, name, sport FROM team
-    </select>
+    <delete id="deleteTeam" parameterType="Long">
+        DELETE FROM team
+        WHERE id = #{id}
+    </delete>
 
     <insert id="addTeamToTournament">
         INSERT INTO team_tournament (team_id, tournament_id)
         VALUES (#{teamId}, #{tournamentId})
     </insert>
 
-    <select id="getTournamentsByTeamId" parameterType="long" resultType="org.example.pskurimaslab1.model.Tournament">
-        SELECT t.id, t.name, t.sport, t.start_date as startDate, t.end_date as endDate, t.winner
-        FROM tournament t
-        JOIN team_tournament tt ON t.id = tt.tournament_id
-        WHERE tt.team_id = #{teamId}
-    </select>
+    <delete id="removeTeamFromTournament">
+        DELETE FROM team_tournament
+        WHERE team_id = #{teamId} AND tournament_id = #{tournamentId}
+    </delete>
+
+    <delete id="removeTeamTournamentRelationship">
+        DELETE FROM team_tournament
+        WHERE team_id = ${teamId}
+    </delete>
+
+    <delete id="removePlayersByTeamId" parameterType="Long">
+        DELETE FROM player
+        WHERE team_id = #{teamId}
+    </delete>
 </mapper>

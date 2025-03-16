@@ -3,6 +3,7 @@ package org.example.pskurimaslab1.controllers;
 import org.example.pskurimaslab1.model.Team;
 import org.example.pskurimaslab1.model.Tournament;
 import org.example.pskurimaslab1.services.TeamService;
+import org.example.pskurimaslab1.services.TournamentService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +15,11 @@ import java.util.List;
 public class TeamUIController {
 
     private final TeamService teamService;
+    private final TournamentService tournamentService;
 
-    public TeamUIController(TeamService teamService) {
+    public TeamUIController(TeamService teamService, TournamentService tournamentService) {
         this.teamService = teamService;
+        this.tournamentService = tournamentService;
     }
 
     @GetMapping
@@ -27,7 +30,7 @@ public class TeamUIController {
     }
 
     @GetMapping("/{id}")
-    public String getTeamById(@PathVariable int id, Model model) {
+    public String getTeamById(@PathVariable Long id, Model model) {
         Team team = teamService.getTeam(id);
         if (team != null) {
             model.addAttribute("team", team);
@@ -50,24 +53,24 @@ public class TeamUIController {
     }
 
     @GetMapping("/edit/{id}")
-    public String showUpdateTeamForm(@PathVariable int id, Model model) {
+    public String showUpdateTeamForm(@PathVariable Long id, Model model) {
         Team team = teamService.getTeam(id);
         if (team != null) {
             model.addAttribute("team", team);
             return "edit-team";
-        } else {
-            return "error";
         }
+        return "error";
     }
 
-    @PostMapping("/edit/{id}")
-    public String updateTeam(@PathVariable int id, @ModelAttribute Team team) {
+    @PostMapping("/update/{id}")
+    public String updateTeam(@PathVariable Long id, @ModelAttribute Team team) {
+        team.setId(id);
         teamService.updateTeam(team);
         return "redirect:/ui/teams";
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteTeam(@PathVariable int id) {
+    public String deleteTeam(@PathVariable Long id) {
         Team team = teamService.getTeam(id);
         if (team != null) {
             teamService.deleteTeam(team);
@@ -76,14 +79,14 @@ public class TeamUIController {
     }
 
     @GetMapping("/{teamId}/tournaments")
-    public String getTournamentsByTeam(@PathVariable long teamId, Model model) {
-        List<Tournament> tournaments = teamService.getTournamentsByTeam(teamId);
+    public String getTournamentsByTeam(@PathVariable Long teamId, Model model) {
+        List<Tournament> tournaments = tournamentService.getTournamentsByTeam(teamId);
         model.addAttribute("tournaments", tournaments);
         return "team-tournaments";
     }
 
     @GetMapping("/{teamId}/add-to-tournament/{tournamentId}")
-    public String addTeamToTournament(@PathVariable long teamId, @PathVariable long tournamentId) {
+    public String addTeamToTournament(@PathVariable Long teamId, @PathVariable Long tournamentId) {
         teamService.addTeamToTournament(teamId, tournamentId);
         return "redirect:/ui/teams/" + teamId + "/tournaments";
     }

@@ -10,8 +10,10 @@ import java.util.List;
 @Mapper
 public interface TeamMapper {
     void insertTeam(Team team);
-    void addTeamToTournament(@Param("teamId") long teamId, @Param("tournamentId") long tournamentId);
-    Team getTeamById(long id);
-    List<Team> getAllTeams();
-    List<Tournament> getTournamentsByTeamId(long teamId);
+    void updateTeam(Team team);
+    void deleteTeam(Long id);
+    void addTeamToTournament(@Param("teamId") Long teamId, @Param("tournamentId") Long tournamentId);
+    void removeTeamFromTournament(@Param("teamId") Long teamId, @Param("tournamentId") Long tournamentId);
+    void removePlayersByTeamId(@Param("teamId") Long teamId);
+    void removeTeamTournamentRelationship(@Param("teamId") Long teamId);
 }

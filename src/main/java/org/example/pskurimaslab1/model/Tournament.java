@@ -1,7 +1,9 @@
 package org.example.pskurimaslab1.model;
 
 import jakarta.persistence.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -12,11 +14,16 @@ public class Tournament {
     private Long id;
     private String name;
     private String sport;
-    private Date startDate;
-    private Date endDate;
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate startDate;
+
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+    private LocalDate endDate;
+
     private String winner;
 
-    @ManyToMany(mappedBy = "tournaments")
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "tournaments", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     private List<Team> teams;
 
     public Long getId() {
@@ -43,19 +50,19 @@ public class Tournament {
         this.sport = sport;
     }
 
-    public Date getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public Date getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 

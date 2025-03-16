@@ -9,7 +9,7 @@ import java.util.List;
 @Mapper
 public interface TournamentMapper {
     void insertTournament(Tournament tournament);
-    Tournament getTournamentById(long id);
-    List<Tournament> getAllTournaments();
-    List<Team> getAllTeamsByTournamentId(long tournamentId);
+    void updateTournament(Tournament tournament);
+    void deleteTournament(Long id);
+    void removeTournamentTeamRelation(Long tournamentId);
 }

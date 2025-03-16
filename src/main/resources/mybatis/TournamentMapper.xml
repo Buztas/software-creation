@@ -8,20 +8,23 @@
         VALUES (#{name}, #{sport}, #{startDate}, #{endDate}, #{winner})
     </insert>
 
-    <select id="getTournamentById" parameterType="long" resultType="org.example.pskurimaslab1.model.Tournament">
-        SELECT id, name, sport, start_date as startDate, end_date as endDate, winner
-        FROM tournament
+    <update id="updateTournament" parameterType="org.example.pskurimaslab1.model.Tournament">
+        UPDATE tournament
+        SET name = #{name},
+            sport = #{sport},
+            start_date = #{startDate},
+            end_date = #{endDate},
+            winner = #{winner}
         WHERE id = #{id}
-    </select>
+    </update>
 
-    <select id="getAllTournaments" resultType="org.example.pskurimaslab1.model.Tournament">
-        SELECT id, name, sport, start_date as startDate, end_date as endDate, winner FROM tournament
-    </select>
+    <delete id="deleteTournament" parameterType="Long">
+        DELETE FROM tournament
+        WHERE id = #{id}
+    </delete>
 
-    <select id="getAllTeamsByTournamentId" parameterType="long" resultType="org.example.pskurimaslab1.model.Team">
-        SELECT t.id, t.name, t.sport
-        FROM team t
-        JOIN team_tournament tt ON t.id = tt.team_id
-        WHERE tt.tournament_id = #{tournamentId}
-    </select>
+    <delete id="removeTournamentTeamRelation" parameterType="Long">
+        DELETE FROM team_tournament
+        WHERE tournament_id = #{tournamentId}
+    </delete>
 </mapper>

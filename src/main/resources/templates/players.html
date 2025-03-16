@@ -24,7 +24,7 @@
         <td th:text="${player.age}"></td>
         <td th:text="${player.team.name}"></td>
         <td>
-            <a th:href="@{/ui/players/{id}(id=${player.id})}">View</a> |
+<!--            <a th:href="@{/ui/players/{id}(id=${player.id})}">View</a> |-->
             <a th:href="@{/ui/players/edit/{id}(id=${player.id})}">Edit</a> |
             <a th:href="@{/ui/players/delete/{id}(id=${player.id})}">Delete</a>
         </td>
@@ -34,6 +34,8 @@
 <br>
 <a th:href="@{/ui/players/add}">Add New Player</a>
 <br>
-<a th:href="@{/ui/teams}">Back to Teams</a>
+<a th:href="@{/ui/tournaments}">Tournaments</a>
+<a th:href="@{/ui/teams}">Teams</a>
+<a th:href="@{/ui/players}">Players</a>
 </body>
 </html>

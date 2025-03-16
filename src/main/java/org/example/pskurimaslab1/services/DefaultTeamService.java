@@ -1,7 +1,6 @@
 package org.example.pskurimaslab1.services;
 
 import org.example.pskurimaslab1.model.Team;
-import org.example.pskurimaslab1.model.Tournament;
 import org.example.pskurimaslab1.mappers.TeamMapper;
 import org.example.pskurimaslab1.repositories.TeamRepository;
 import org.springframework.stereotype.Service;
@@ -28,34 +27,36 @@ public class DefaultTeamService implements TeamService {
 
     @Override
     @Transactional
-    public void addTeamToTournament(long teamId, long tournamentId) {
+    public void addTeamToTournament(Long teamId, Long tournamentId) {
         teamMapper.addTeamToTournament(teamId, tournamentId);
     }
 
     @Override
     @Transactional
     public void deleteTeam(Team team) {
-        teamRepository.delete(team);
+        teamMapper.removePlayersByTeamId(team.getId());
+        teamMapper.removeTeamTournamentRelationship(team.getId());
+        teamMapper.deleteTeam(team.getId());
     }
 
     @Override
     @Transactional
     public void updateTeam(Team team) {
-        teamRepository.save(team);
+        teamMapper.updateTeam(team);
     }
 
     @Override
     public List<Team> getTeams() {
-        return teamMapper.getAllTeams();
+        return teamRepository.findAll();
     }
 
     @Override
-    public Team getTeam(int id) {
-        return teamMapper.getTeamById(id);
+    public Team getTeam(Long id) {
+        return teamRepository.findById(id).orElse(null);
     }
 
     @Override
-    public List<Tournament> getTournamentsByTeam(long teamId) {
-        return teamMapper.getTournamentsByTeamId(teamId);
+    public List<Team> getTeamsByTournamentId(Long tournamentId) {
+        return teamRepository.findTeamsByTournamentId(tournamentId);
     }
 }
