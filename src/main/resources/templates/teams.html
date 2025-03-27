@@ -1,36 +1,36 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <title>Teams</title>
-</head>
-<body>
-<h1>Teams</h1>
-<table border="1">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Sport</th>
-        <th>Actions</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="team : ${teams}">
-        <td th:text="${team.id}"></td>
-        <td th:text="${team.name}"></td>
-        <td th:text="${team.sport}"></td>
-        <td>
-            <a th:href="@{/ui/teams/{id}(id=${team.id})}">View</a> |
-            <a th:href="@{/ui/teams/edit/{id}(id=${team.id})}">Edit</a> |
-            <a th:href="@{/ui/teams/delete/{id}(id=${team.id})}">Delete</a>
-        </td>
-    </tr>
-    </tbody>
-</table>
-<br>
-<a th:href="@{/ui/teams/add}">Add New Team</a>
-<a th:href="@{/ui/tournaments}">Tournaments</a>
-<a th:href="@{/ui/teams}">Teams</a>
-<a th:href="@{/ui/players}">Players</a>
-</body>
-</html>
+<!--<!DOCTYPE html>-->
+<!--<html xmlns:th="http://www.thymeleaf.org">-->
+<!--<head>-->
+<!--    <title>Teams</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--<h1>Teams</h1>-->
+<!--<table border="1">-->
+<!--    <thead>-->
+<!--    <tr>-->
+<!--        <th>ID</th>-->
+<!--        <th>Name</th>-->
+<!--        <th>Sport</th>-->
+<!--        <th>Actions</th>-->
+<!--    </tr>-->
+<!--    </thead>-->
+<!--    <tbody>-->
+<!--    <tr th:each="team : ${teams}">-->
+<!--        <td th:text="${team.id}"></td>-->
+<!--        <td th:text="${team.name}"></td>-->
+<!--        <td th:text="${team.sport}"></td>-->
+<!--        <td>-->
+<!--            <a th:href="@{/ui/teams/{id}(id=${team.id})}">View</a> |-->
+<!--            <a th:href="@{/ui/teams/edit/{id}(id=${team.id})}">Edit</a> |-->
+<!--            <a th:href="@{/ui/teams/delete/{id}(id=${team.id})}">Delete</a>-->
+<!--        </td>-->
+<!--    </tr>-->
+<!--    </tbody>-->
+<!--</table>-->
+<!--<br>-->
+<!--<a th:href="@{/ui/teams/add}">Add New Team</a>-->
+<!--<a th:href="@{/ui/tournaments}">Tournaments</a>-->
+<!--<a th:href="@{/ui/teams}">Teams</a>-->
+<!--<a th:href="@{/ui/players}">Players</a>-->
+<!--</body>-->
+<!--</html>-->

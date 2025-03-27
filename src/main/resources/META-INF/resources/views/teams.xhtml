@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+    <title>Teams</title>
+</h:head>
+
+<h:body>
+    <h1>Teams</h1>
+
+    <!-- Data Table for Teams -->
+    <h:dataTable value="#{teamBean.teams}" var="team" border="1">
+        <h:column>
+            <f:facet name="header">ID</f:facet>
+            <h:outputText value="#{team.id}" />
+        </h:column>
+        <h:column>
+            <f:facet name="header">Name</f:facet>
+            <h:outputText value="#{team.name}" />
+        </h:column>
+        <h:column>
+            <f:facet name="header">Sport</f:facet>
+            <h:outputText value="#{team.sport}" />
+        </h:column>
+        <h:column>
+            <f:facet name="header">Actions</f:facet>
+            <h:link value="View" outcome="team-details.xhtml">
+                <f:param name="teamId" value="#{team.id}" />
+            </h:link>
+            |
+            <h:link value="Edit" outcome="edit-team.xhtml">
+                <f:param name="teamId" value="#{team.id}" />
+            </h:link>
+            |
+            <h:form style="display:inline">
+                <h:commandButton value="Delete" action="#{teamBean.deleteTeam(team)}" />
+            </h:form>
+        </h:column>
+    </h:dataTable>
+
+    <br/>
+
+    <!-- Links -->
+    <h:link value="Add New Team" outcome="add-team.xhtml"/>
+    <h:link value="Tournaments" outcome="tournaments.xhtml"/>
+    <h:link value="Teams" outcome="teams.xhtml"/>
+    <h:link value="Players" outcome="players.xhtml"/>
+</h:body>
+</html>
