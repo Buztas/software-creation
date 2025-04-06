@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<h:head>
+    <title>Add Player</title>
+</h:head>
+<h:body>
+    <h1>Add New Player</h1>
+    <h:form>
+        <div>
+            <h:outputLabel for="name">Name:</h:outputLabel>
+            <h:inputText id="name" value="#{playerBean.player.name}" required="true" />
+        </div>
+        <div>
+            <h:outputLabel for="surname">Surname:</h:outputLabel>
+            <h:inputText id="surname" value="#{playerBean.player.surname}" required="true" />
+        </div>
+        <div>
+            <h:outputLabel for="age">Age:</h:outputLabel>
+            <h:inputText id="age" value="#{playerBean.player.age}" required="true">
+                <f:convertNumber integerOnly="true" />
+            </h:inputText>
+        </div>
+        <div>
+            <h:outputLabel for="team">Team:</h:outputLabel>
+            <h:selectOneMenu id="team" value="#{playerBean.selectedTeamId}" required="true">
+                <f:selectItems value="#{playerBean.teams}" var="team"
+                               itemValue="#{team.id}" itemLabel="#{team.name}" />
+            </h:selectOneMenu>
+        </div>
+        <div>
+            <h:commandButton value="Add Player" action="#{playerBean.addPlayer}" />
+        </div>
+    </h:form>
+
+    <div>
+        <h:link outcome="tournaments" value="Tournaments" />
+        <h:link outcome="teams" value="Teams" />
+        <h:link outcome="players" value="Players" />
+    </div>
+</h:body>
+</html>

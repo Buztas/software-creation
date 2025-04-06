@@ -59,18 +59,19 @@ public class DefaultTournamentService implements TournamentService {
         }
     }
 
-
     @Override
     @Transactional
-    public void removeTeamFromTournament(Long tournamentId, Long teamId) {
+    public void removeTeamFromTournament(Long teamId, Long tournamentId) {
         Tournament tournament = tournamentRepository.findById(tournamentId.intValue()).orElse(null);
         Team team = teamRepository.findById(teamId).orElse(null);
 
         if (tournament != null && team != null) {
-            tournament.getTeams().remove(team);
-            team.getTournaments().remove(tournament);
-            teamMapper.removeTeamFromTournament(tournamentId, teamId);
+            // Remove bidirectional relationship
+            tournament.getTeams().removeIf(t -> t.getId().equals(teamId));
+            team.getTournaments().removeIf(t -> t.getId().equals(tournamentId));
+
             tournamentRepository.save(tournament);
+            teamRepository.save(team);
         }
     }
 

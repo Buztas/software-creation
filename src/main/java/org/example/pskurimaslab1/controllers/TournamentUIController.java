@@ -72,8 +72,8 @@ public class TournamentUIController {
     }
 
     private boolean isConflicting(Tournament newTournament, Tournament existingTournament) {
-        return !(newTournament.getEndDate().isBefore(existingTournament.getStartDate()) ||
-                newTournament.getStartDate().isAfter(existingTournament.getEndDate()));
+        return !(newTournament.getEndDate().before(existingTournament.getStartDate()) ||
+                newTournament.getStartDate().after(existingTournament.getEndDate()));
     }
 
     @PostMapping("/update/{id}")
