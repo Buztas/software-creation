@@ -39,4 +39,8 @@
         DELETE FROM player
         WHERE team_id = #{teamId}
     </delete>
+
+    <delete id="removePlayerFromTeam" parameterType="Long">
+        DELETE FROM team WHERE player_id = ${playerId} AND id = ${teamId}
+    </delete>
 </mapper>

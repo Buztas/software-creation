@@ -13,7 +13,9 @@
     </f:metadata>
 
     <h1>Edit Tournament</h1>
-    <h:form>
+
+    <!-- Tournament details form -->
+    <h:form id="tournamentForm">
         <div>
             <h:outputLabel for="name">Name:</h:outputLabel>
             <h:inputText id="name" value="#{tournamentBean.tournament.name}" required="true" />
@@ -39,37 +41,46 @@
             <h:inputText id="winner" value="#{tournamentBean.tournament.winner}" />
         </div>
 
-        <h2>Manage Teams</h2>
-
-        <h3>Current Teams in Tournament</h3>
-        <h:form>
-            <h:dataTable value="#{tournamentBean.tournament.teams}" var="team">
-                <h:column>
-                    <h:outputText value="#{team.name}" />
-                </h:column>
-                <h:column>
-                    <h:commandLink action="#{tournamentBean.removeTeamFromTournament(team, tournamentBean.tournament)}" value="Remove" />
-                </h:column>
-            </h:dataTable>
-        </h:form>
-
         <div>
             <h:commandButton value="Update Tournament" action="#{tournamentBean.updateTournament}" />
         </div>
     </h:form>
 
-    <h3>Add Teams</h3>
-    <h:form>
+    <h2>Manage Teams</h2>
+
+    <!-- Teams table form - separated from the main form -->
+    <h:form id="teamsForm">
+        <h3>Current Teams in Tournament</h3>
+        <h:dataTable value="#{tournamentBean.tournamentTeams}" var="team">
+            <h:column>
+                <f:facet name="header">Team Name</f:facet>
+                <h:outputText value="#{team.name}" />
+            </h:column>
+            <h:column>
+                <f:facet name="header">Action</f:facet>
+                <h:commandButton value="Remove" action="#{tournamentBean.removeTeamFromTournament(team, tournamentBean.tournament)}">
+                    <f:ajax render="teamsForm addTeamForm" />
+                </h:commandButton>
+            </h:column>
+        </h:dataTable>
+    </h:form>
+
+    <!-- Add team form - separated as well -->
+    <h:form id="addTeamForm">
+        <h3>Add Teams</h3>
         <h:selectOneMenu value="#{tournamentBean.selectedTeamId}">
+            <f:selectItem itemLabel="-- Select Team --" itemValue="" />
             <f:selectItems value="#{tournamentBean.availableTeams}" var="team"
                            itemValue="#{team.id}" itemLabel="#{team.name}" />
         </h:selectOneMenu>
-        <h:commandButton value="Add Team" action="#{tournamentBean.addTeamToTournament}" />
+        <h:commandButton value="Add Team" action="#{tournamentBean.addTeamToTournament}">
+            <f:ajax execute="@form" render="teamsForm addTeamForm" />
+        </h:commandButton>
     </h:form>
 
     <div>
-        <h:link outcome="tournaments" value="Tournaments" />
-        <h:link outcome="teams" value="Teams" />
+        <h:link outcome="tournaments" value="Tournaments" /> |
+        <h:link outcome="teams" value="Teams" /> |
         <h:link outcome="players" value="Players" />
     </div>
 </h:body>

@@ -10,6 +10,7 @@ public interface TeamService {
     void addTeamToTournament(Long teamId, Long tournamentId);
     void deleteTeam(Team team);
     void updateTeam(Team team);
+    void removePlayerFromTeam(Long teamId, Long playerId);
     List<Team> getTeams();
     Team getTeam(Long id);
     List<Team> getTeamsByTournamentId(Long tournamentId);

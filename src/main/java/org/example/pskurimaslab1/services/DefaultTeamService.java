@@ -46,6 +46,12 @@ public class DefaultTeamService implements TeamService {
     }
 
     @Override
+    @Transactional
+    public void removePlayerFromTeam(Long teamId, Long playerId) {
+        teamMapper.removePlayerFromTeam(teamId, playerId);
+    }
+
+    @Override
     public List<Team> getTeams() {
         return teamRepository.findAll();
     }

@@ -16,4 +16,5 @@ public interface TeamMapper {
     void removeTeamFromTournament(@Param("teamId") Long teamId, @Param("tournamentId") Long tournamentId);
     void removePlayersByTeamId(@Param("teamId") Long teamId);
     void removeTeamTournamentRelationship(@Param("teamId") Long teamId);
+    void removePlayerFromTeam(@Param("teamId") Long teamId, @Param("playerId") Long playerId);
 }

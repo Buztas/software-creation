@@ -3,6 +3,7 @@ package org.example.pskurimaslab1.jsfbeans;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.view.ViewScoped;
 import jakarta.inject.Named;
+import org.example.pskurimaslab1.model.Player;
 import org.example.pskurimaslab1.model.Team;
 import org.example.pskurimaslab1.services.TeamService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +50,11 @@ public class TeamBean implements Serializable {
     public void deleteTeam(Team team) {
         teamService.deleteTeam(team);
         teams = teamService.getTeams(); // Refresh list
+    }
+
+    public void removePlayer(Team team, Player player) {
+        teamService.removePlayerFromTeam(team.getId(), player.getId());
+        teams = teamService.getTeams();
     }
 
     // Getters and Setters
