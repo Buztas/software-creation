@@ -48,9 +48,10 @@ public class PlayerBean implements Serializable {
         player = playerService.getPlayer(playerId);
         if (player != null && player.getTeam() != null) {
             selectedTeamId = player.getTeam().getId();
+        } else {
+            selectedTeamId = null;
         }
     }
-
     private void loadPlayers() {
         players = playerService.getPlayers();
     }

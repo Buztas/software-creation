@@ -25,7 +25,7 @@
         </div>
         <div>
             <h:outputLabel for="team">Team:</h:outputLabel>
-            <h:selectOneMenu id="team" value="#{playerBean.player.team.id}">
+            <h:selectOneMenu id="team" value="#{playerBean.selectedTeamId}">
                 <f:selectItems value="#{playerBean.teams}" var="team"
                                itemValue="#{team.id}" itemLabel="#{team.name}" />
             </h:selectOneMenu>
