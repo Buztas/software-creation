@@ -46,7 +46,6 @@ public class TournamentBean implements Serializable {
     private void loadAvailableTeams() {
         List<Team> allTeams = teamService.getTeams();
         if (tournament != null && tournament.getTeams() != null) {
-            // Filter out teams that are already in the tournament
             availableTeams = teamService.getTeams().stream()
                     .filter(team -> team.getTournaments().stream()
                             .noneMatch(existingTournament -> isConflicting(tournament, existingTournament)))
@@ -59,7 +58,6 @@ public class TournamentBean implements Serializable {
     private void loadTeamsInTournament() {
         List<Team> allTeams = teamService.getTeams();
         if (tournament != null && tournament.getTeams() != null) {
-            // Filter out teams that are already in the tournament
             tournamentTeams = tournament.getTeams();
         } else {
             tournamentTeams = allTeams;
@@ -101,7 +99,6 @@ public class TournamentBean implements Serializable {
             loadTournaments();
             return "tournaments?faces-redirect=true";
         } catch (Exception e) {
-            // Handle exception
             return null;
         }
     }
@@ -112,7 +109,6 @@ public class TournamentBean implements Serializable {
             loadTournaments();
             return "tournaments?faces-redirect=true";
         } catch (Exception e) {
-            // Handle exception
             return null;
         }
     }
@@ -120,12 +116,10 @@ public class TournamentBean implements Serializable {
     public String addTeamToTournament() {
         try {
             teamService.addTeamToTournament(selectedTeamId, tournament.getId());
-            // Reload tournament to reflect changes
             tournament = tournamentService.getTournament(tournament.getId());
             loadAvailableTeams();
-            return null; // Stay on the same page
+            return null;
         } catch (Exception e) {
-            // Handle exception
             return null;
         }
     }
@@ -142,18 +136,15 @@ public class TournamentBean implements Serializable {
 
     public String removeTeamFromTournament(Team team, Tournament tournament) {
         try {
-            if (tournament != null) { // Ensure the tournament is not null
-                // Call the service to remove the team from the tournament
+            if (tournament != null) {
                 tournamentService.removeTeamFromTournament(team.getId(), tournament.getId());
 
-                // Reload the tournament and update the teams
                 tournament = tournamentService.getTournament(tournament.getId());
-                loadAvailableTeams();  // Reload available teams
-                loadTeamsInTournament(); // Reload teams in tournament
+                loadAvailableTeams();
+                loadTeamsInTournament();
             }
-            return null; // Stay on the same page
+            return null;
         } catch (Exception e) {
-            // Handle exception (e.g., log it)
             return null;
         }
     }

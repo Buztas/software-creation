@@ -19,11 +19,11 @@ public class TeamBean implements Serializable {
 
     private Long teamId;
     private Team team = new Team();
-    private List<Team> teams; // Holds the list of teams
+    private List<Team> teams;
 
     @PostConstruct
     public void init() {
-        teams = teamService.getTeams(); // Load teams initially
+        teams = teamService.getTeams();
     }
 
     public void loadTeam() {
@@ -36,20 +36,20 @@ public class TeamBean implements Serializable {
 
     public void addTeam() {
         teamService.addTeam(team);
-        teams = teamService.getTeams(); // Refresh list
-        team = new Team(); // Reset form
+        teams = teamService.getTeams();
+        team = new Team();
     }
 
     public void updateTeam() {
         if (team != null && team.getId() != null) {
             teamService.updateTeam(team);
-            teams = teamService.getTeams(); // Refresh list
+            teams = teamService.getTeams();
         }
     }
 
     public void deleteTeam(Team team) {
         teamService.deleteTeam(team);
-        teams = teamService.getTeams(); // Refresh list
+        teams = teamService.getTeams();
     }
 
     public void removePlayer(Team team, Player player) {
@@ -57,7 +57,6 @@ public class TeamBean implements Serializable {
         teams = teamService.getTeams();
     }
 
-    // Getters and Setters
     public Long getTeamId() { return teamId; }
     public void setTeamId(Long teamId) { this.teamId = teamId; }
     public Team getTeam() { return team; }

@@ -14,7 +14,6 @@
 
     <h1>Edit Tournament</h1>
 
-    <!-- Tournament details form -->
     <h:form id="tournamentForm">
         <div>
             <h:outputLabel for="name">Name:</h:outputLabel>
@@ -48,7 +47,6 @@
 
     <h2>Manage Teams</h2>
 
-    <!-- Teams table form - separated from the main form -->
     <h:form id="teamsForm">
         <h3>Current Teams in Tournament</h3>
         <h:dataTable value="#{tournamentBean.tournamentTeams}" var="team">
@@ -65,7 +63,6 @@
         </h:dataTable>
     </h:form>
 
-    <!-- Add team form - separated as well -->
     <h:form id="addTeamForm">
         <h3>Add Teams</h3>
         <h:selectOneMenu value="#{tournamentBean.selectedTeamId}">

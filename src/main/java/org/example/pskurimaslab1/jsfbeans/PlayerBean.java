@@ -35,7 +35,6 @@ public class PlayerBean implements Serializable {
         loadPlayers();
         loadTeams();
 
-        // Check if we're in edit mode (with player ID in request)
         Map<String, String> params = FacesContext.getCurrentInstance()
                 .getExternalContext().getRequestParameterMap();
         String playerId = params.get("id");
@@ -98,7 +97,6 @@ public class PlayerBean implements Serializable {
             loadPlayers();
             return "players?faces-redirect=true";
         } catch (Exception e) {
-            // Handle exception
             return null;
         }
     }
@@ -117,7 +115,6 @@ public class PlayerBean implements Serializable {
             loadPlayers();
             return "players?faces-redirect=true";
         } catch (Exception e) {
-            // Handle exception
             return null;
         }
     }
@@ -126,9 +123,8 @@ public class PlayerBean implements Serializable {
         try {
             playerService.removePlayer(player.getId());
             loadPlayers();
-            return null; // Stay on the same page
+            return null;
         } catch (Exception e) {
-            // Handle exception
             return null;
         }
     }

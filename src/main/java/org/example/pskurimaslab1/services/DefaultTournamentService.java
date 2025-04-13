@@ -17,13 +17,11 @@ public class DefaultTournamentService implements TournamentService {
     private final TournamentRepository tournamentRepository;
     private final TeamRepository teamRepository;
     private final TournamentMapper tournamentMapper;
-    private final TeamMapper teamMapper;
 
-    public DefaultTournamentService(TournamentRepository tournamentRepository, TeamRepository teamRepository, TournamentMapper tournamentMapper, TeamMapper teamMapper) {
+    public DefaultTournamentService(TournamentRepository tournamentRepository, TeamRepository teamRepository, TournamentMapper tournamentMapper) {
         this.tournamentRepository = tournamentRepository;
         this.teamRepository = teamRepository;
         this.tournamentMapper = tournamentMapper;
-        this.teamMapper = teamMapper;
     }
 
     @Override
@@ -66,7 +64,6 @@ public class DefaultTournamentService implements TournamentService {
         Team team = teamRepository.findById(teamId).orElse(null);
 
         if (tournament != null && team != null) {
-            // Remove bidirectional relationship
             tournament.getTeams().removeIf(t -> t.getId().equals(teamId));
             team.getTournaments().removeIf(t -> t.getId().equals(tournamentId));
 
