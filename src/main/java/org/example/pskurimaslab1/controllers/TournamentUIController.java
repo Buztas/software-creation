@@ -78,9 +78,9 @@ public class TournamentUIController {
 
     @PostMapping("/update/{id}")
     public String updateTournament(@PathVariable Long id, @ModelAttribute Tournament tournament) {
-        tournament.setId(id); // Ensure the ID is set
+        tournament.setId(id);
         tournamentService.updateTournament(tournament);
-        return "redirect:/ui/tournaments"; // Redirect to the tournaments list page
+        return "redirect:/ui/tournaments";
     }
 
     @GetMapping("/delete/{id}")
