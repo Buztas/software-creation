@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tournament Details</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-4">
+    <h2 id="tournament-name">Tournament Name</h2>
+
+    <h4>Tournament Details</h4>
+    <ul>
+        <li><strong>Sport:</strong> <span id="tournament-sport"></span></li>
+        <li><strong>Start Date:</strong> <span id="tournament-start"></span></li>
+        <li><strong>End Date:</strong> <span id="tournament-end"></span></li>
+        <li><strong>Winner:</strong> <span id="tournament-winner">TBD</span></li>
+    </ul>
+
+    <h4>Teams in this Tournament</h4>
+    <ul id="tournament-teams">
+        <!-- Populated by JS -->
+    </ul>
+
+    <a href="/index.html" class="btn btn-secondary">Back to Dashboard</a>
+</div>
+
+<script src="./tournament-details.js" defer></script>
+</body>
+</html>

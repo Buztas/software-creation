@@ -8,9 +8,9 @@ import java.util.List;
 public interface PlayerService {
     Player getPlayer(Long id);
     List<Player> getPlayers();
-    void addPlayer(Player player);
+    Player addPlayer(Player player);
     void removePlayer(Long id);
     void removeAllPlayers();
-    void updatePlayer(Player player);
+    Player updatePlayer(Player player);
     List<Player> getPlayersByTeam(Long teamId);
 }

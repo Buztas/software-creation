@@ -6,10 +6,10 @@ import org.example.pskurimaslab1.model.Tournament;
 import java.util.List;
 
 public interface TeamService {
-    void addTeam(Team team);
+    Team addTeam(Team team);
     void addTeamToTournament(Long teamId, Long tournamentId);
     void deleteTeam(Team team);
-    void updateTeam(Team team);
+    Team updateTeam(Team team);
     void removePlayerFromTeam(Long teamId, Long playerId);
     List<Team> getTeams();
     Team getTeam(Long id);

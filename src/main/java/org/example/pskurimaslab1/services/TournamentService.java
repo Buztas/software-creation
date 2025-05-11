@@ -6,9 +6,9 @@ import org.example.pskurimaslab1.model.Tournament;
 import java.util.List;
 
 public interface TournamentService {
-    void addTournament(Tournament tournament);
+    Tournament addTournament(Tournament tournament);
     void removeFromTournament(Tournament tournament);
-    void updateTournament(Tournament tournament);
+    Tournament updateTournament(Tournament tournament);
     void addTeamToTournament(Long tournamentId, Long teamId);
     void removeTeamFromTournament(Long tournamentId, Long teamId);
     Tournament getTournament(Long id);

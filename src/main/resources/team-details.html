@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Team Details</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-4">
+    <h2>Team Details</h2>
+
+    <p><strong>ID:</strong> <span id="team-id"></span></p>
+    <p><strong>Name:</strong> <span id="team-name"></span></p>
+    <p><strong>Sport:</strong> <span id="team-sport"></span></p>
+
+    <h3>Players</h3>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Player ID</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Age</th>
+        </tr>
+        </thead>
+        <tbody id="players-table-body">
+        <!-- Filled by JS -->
+        </tbody>
+    </table>
+
+    <h3>Tournaments</h3>
+    <ul id="tournament-list">
+        <!-- Filled by JS -->
+    </ul>
+
+    <a href="/index.html" class="btn btn-secondary">Back to Teams</a>
+</div>
+
+<script src="./team-details.js" defer></script>
+</body>
+</html>

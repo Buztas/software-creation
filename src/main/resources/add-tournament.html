@@ -1,0 +1,40 @@
+<!-- public/add-tournament.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Tournament</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-4">
+    <h2>Add New Tournament</h2>
+    <form id="add-tournament-form">
+        <div class="form-group">
+            <label for="name">Tournament Name</label>
+            <input type="text" class="form-control" name="name" id="name" required>
+        </div>
+        <div class="form-group">
+            <label for="sport">Sport</label>
+            <input type="text" class="form-control" name="sport" id="sport" required>
+        </div>
+        <div class="form-group">
+            <label for="startDate">Start Date</label>
+            <input type="date" class="form-control" name="startDate" id="startDate" required>
+        </div>
+        <div class="form-group">
+            <label for="endDate">End Date</label>
+            <input type="date" class="form-control" name="endDate" id="endDate" required>
+        </div>
+        <div class="form-group">
+            <label for="winner">Winner (optional)</label>
+            <input type="text" class="form-control" name="winner" id="winner">
+        </div>
+        <button type="submit" class="btn btn-primary">Add Tournament</button>
+        <a href="/index.html" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+
+<script src="./scripts.js"></script>
+</body>
+</html>

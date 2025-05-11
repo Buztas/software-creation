@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Team</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-4">
+    <h2>Add New Team</h2>
+
+    <form id="add-team-form">
+        <div class="form-group">
+            <label for="name">Team Name</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+
+        <div class="form-group">
+            <label for="sport">Sport</label>
+            <input type="text" class="form-control" id="sport" name="sport" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Add Team</button>
+        <a href="/index.html" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+
+<script src="./add-team.js" defer></script>
+</body>
+</html>

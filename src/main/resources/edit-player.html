@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Player</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container mt-4">
+    <h2>Edit Player</h2>
+
+    <form id="edit-player-form">
+        <input type="hidden" id="player-id" />
+
+        <div class="form-group">
+            <label for="name">First Name</label>
+            <input type="text" class="form-control" id="name" required>
+        </div>
+
+        <div class="form-group">
+            <label for="surname">Last Name</label>
+            <input type="text" class="form-control" id="surname" required>
+        </div>
+
+        <div class="form-group">
+            <label for="age">Age</label>
+            <input type="number" class="form-control" id="age" required>
+        </div>
+
+        <div class="form-group">
+            <label for="team">Team</label>
+            <select class="form-control" id="team" required>
+                <!-- Teams will be loaded here -->
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update Player</button>
+        <a href="/index.html" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+
+<script src="./edit-player.js" defer></script>
+</body>
+</html>

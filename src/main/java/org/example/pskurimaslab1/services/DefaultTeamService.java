@@ -1,54 +1,53 @@
 package org.example.pskurimaslab1.services;
 
 import org.example.pskurimaslab1.model.Team;
-import org.example.pskurimaslab1.mappers.TeamMapper;
 import org.example.pskurimaslab1.repositories.TeamRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+//TODO: adjust the crud methods
+
 @Service
 public class DefaultTeamService implements TeamService {
 
     private final TeamRepository teamRepository;
-    private final TeamMapper teamMapper;
 
-    public DefaultTeamService(TeamRepository teamRepository, TeamMapper teamMapper) {
+    public DefaultTeamService(TeamRepository teamRepository) {
         this.teamRepository = teamRepository;
-        this.teamMapper = teamMapper;
     }
 
     @Override
     @Transactional
-    public void addTeam(Team team) {
-        teamMapper.insertTeam(team);
+    public Team addTeam(Team team) {
+        return teamRepository.save(team);
     }
 
     @Override
     @Transactional
     public void addTeamToTournament(Long teamId, Long tournamentId) {
-        teamMapper.addTeamToTournament(teamId, tournamentId);
+        teamRepository.addTeamToTournament(teamId, tournamentId);
     }
 
     @Override
     @Transactional
     public void deleteTeam(Team team) {
-        teamMapper.removePlayersByTeamId(team.getId());
-        teamMapper.removeTeamTournamentRelationship(team.getId());
-        teamMapper.deleteTeam(team.getId());
+        teamRepository.removePlayersByTeamId(team.getId());
+        teamRepository.removeTeamTournamentRelationship(team.getId());
+        teamRepository.deleteById(team.getId());
     }
 
     @Override
     @Transactional
-    public void updateTeam(Team team) {
-        teamMapper.updateTeam(team);
+    public Team updateTeam(Team team) {
+        return teamRepository.save(team);
     }
 
     @Override
     @Transactional
     public void removePlayerFromTeam(Long teamId, Long playerId) {
-        teamMapper.removePlayerFromTeam(teamId, playerId);
+        teamRepository.removePlayerFromTeam(teamId, playerId);
     }
 
     @Override

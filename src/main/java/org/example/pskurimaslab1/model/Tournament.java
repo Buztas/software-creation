@@ -1,5 +1,6 @@
 package org.example.pskurimaslab1.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -23,6 +24,7 @@ public class Tournament {
     private String winner;
 
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "tournaments", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @JsonIgnore
     private List<Team> teams;
 
     public Long getId() {

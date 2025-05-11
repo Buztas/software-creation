@@ -1,5 +1,6 @@
 package org.example.pskurimaslab1.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.util.List;
