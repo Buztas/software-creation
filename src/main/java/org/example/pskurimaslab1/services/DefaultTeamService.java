@@ -1,7 +1,9 @@
 package org.example.pskurimaslab1.services;
 
 import org.example.pskurimaslab1.model.Team;
+import org.example.pskurimaslab1.model.Tournament;
 import org.example.pskurimaslab1.repositories.TeamRepository;
+import org.example.pskurimaslab1.repositories.TournamentRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -13,9 +15,11 @@ import java.util.List;
 public class DefaultTeamService implements TeamService {
 
     private final TeamRepository teamRepository;
+    private final TournamentRepository tournamentRepository;
 
-    public DefaultTeamService(TeamRepository teamRepository) {
+    public DefaultTeamService(TeamRepository teamRepository, TournamentRepository tournamentRepository) {
         this.teamRepository = teamRepository;
+        this.tournamentRepository = tournamentRepository;
     }
 
     @Override
@@ -33,10 +37,29 @@ public class DefaultTeamService implements TeamService {
     @Override
     @Transactional
     public void deleteTeam(Team team) {
+        // Unlink from tournaments manually
+        if (team.getTournaments() != null) {
+            for (Tournament tournament : team.getTournaments()) {
+                // Remove from tournament's team list
+                tournament.getTeams().removeIf(t -> t.getId().equals(team.getId()));
+
+                // Reset winner if this team was the winner
+                if (team.getName().equals(tournament.getWinner())) {
+                    tournament.setWinner(null);
+                }
+            }
+            tournamentRepository.saveAll(team.getTournaments());
+        }
+
+        // Now remove relationships and players
         teamRepository.removePlayersByTeamId(team.getId());
         teamRepository.removeTeamTournamentRelationship(team.getId());
+        teamRepository.flush();
+
         teamRepository.deleteById(team.getId());
+        teamRepository.flush();
     }
+
 
     @Override
     @Transactional

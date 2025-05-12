@@ -1,141 +1,75 @@
 document.addEventListener("DOMContentLoaded", () => {
     const API_BASE = "http://localhost:8080/api";
-    const tournamentId = getTournamentIdFromUrl();
-    const form = document.getElementById("edit-tournament-form");
-    const teamList = document.getElementById("tournament-teams");
-    const deleteBtn = document.getElementById("delete-tournament");
-    const winnerSelect = document.getElementById("winner");
 
-    if (!tournamentId) {
-        alert("Tournament ID is missing from the URL.");
-        return;
-    }
+    const tournamentTableBody = document.getElementById("tournament-table-body");
+    const teamTableBody = document.getElementById("team-table-body");
+    const playerTableBody = document.getElementById("player-table-body");
 
-    // Fetch tournament first, then teams
-    (async () => {
-        await fetchTournament(tournamentId);
-        await fetchTeams(tournamentId);
-    })();
-
-    form.addEventListener("submit", async (e) => {
-        e.preventDefault();
-
-        const updatedTournament = {
-            id: tournamentId,
-            name: form.name.value,
-            sport: form.sport.value,
-            startDate: form.startDate.value,
-            endDate: form.endDate.value,
-            winner: winnerSelect.value || null
-        };
-
-        try {
-            const res = await fetch(`${API_BASE}/tournaments/${tournamentId}`, {
-                method: "PUT",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(updatedTournament)
+    // Fetch and populate tournaments
+    fetch(`${API_BASE}/tournaments`)
+        .then(res => res.json())
+        .then(tournaments => {
+            tournamentTableBody.innerHTML = "";
+            tournaments.forEach(tournament => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${tournament.id}</td>
+                    <td>${tournament.name}</td>
+                    <td>${tournament.sport}</td>
+                    <td>${tournament.startDate}</td>
+                    <td>${tournament.endDate}</td>
+                    <td>
+                        <a href="tournament-details.html?id=${tournament.id}" class="btn btn-info btn-sm">View</a>
+                        <a href="edit-tournament.html?id=${tournament.id}" class="btn btn-warning btn-sm">Edit</a>
+                        <button class="btn btn-danger btn-sm" data-type="tournament" data-id="${tournament.id}">Delete</button>
+                    </td>
+                `;
+                tournamentTableBody.appendChild(row);
             });
+        })
+        .catch(err => console.error("Failed to load tournaments:", err));
 
-            if (res.ok) {
-                alert("Tournament updated successfully.");
-                window.location.href = "/index.html";
-            } else {
-                alert("Failed to update tournament.");
-            }
-        } catch (err) {
-            console.error("Error updating tournament:", err);
-        }
-    });
-
-    deleteBtn.addEventListener("click", async () => {
-        if (!confirm("Are you sure you want to delete this tournament?")) return;
-
-        try {
-            const res = await fetch(`${API_BASE}/tournaments/${tournamentId}`, {
-                method: "DELETE"
-            });
-
-            if (res.ok) {
-                alert("Tournament deleted.");
-                window.location.href = "/index.html";
-            } else {
-                alert("Failed to delete tournament.");
-            }
-        } catch (err) {
-            console.error("Error deleting tournament:", err);
-        }
-    });
-
-    async function fetchTournament(id) {
-        try {
-            const res = await fetch(`${API_BASE}/tournaments/${id}`);
-            if (!res.ok) throw new Error("Tournament not found");
-
-            const data = await res.json();
-            form.name.value = data.name || "";
-            form.sport.value = data.sport || "";
-            form.startDate.value = data.startDate?.slice(0, 10) || "";
-            form.endDate.value = data.endDate?.slice(0, 10) || "";
-            winnerSelect.dataset.currentWinner = data.winner || "";
-        } catch (err) {
-            console.error("Error fetching tournament:", err);
-        }
-    }
-
-    async function fetchTeams(id) {
-        try {
-            const res = await fetch(`${API_BASE}/tournaments/${id}/teams`);
-            const teams = await res.json();
-
-            teamList.innerHTML = "";
-            winnerSelect.innerHTML = '<option value="">-- Select Winner (Optional) --</option>';
-            const currentWinner = winnerSelect.dataset.currentWinner;
-
+    // Fetch and populate teams
+    fetch(`${API_BASE}/teams`)
+        .then(res => res.json())
+        .then(teams => {
+            teamTableBody.innerHTML = "";
             teams.forEach(team => {
-                // Team list
-                const li = document.createElement("li");
-                li.className = "list-group-item d-flex justify-content-between align-items-center";
-                li.innerHTML = `
-                    ${team.name}
-                    <button class="btn btn-danger btn-sm">Remove</button>`;
-                li.querySelector("button").addEventListener("click", () => removeTeam(id, team.id));
-                teamList.appendChild(li);
-
-                // Winner dropdown
-                const option = document.createElement("option");
-                option.value = team.name;
-                option.textContent = team.name;
-                if (team.name === currentWinner) option.selected = true;
-                winnerSelect.appendChild(option);
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${team.id}</td>
+                    <td>${team.name}</td>
+                    <td>${team.sport}</td>
+                    <td>
+                        <a href="team-details.html?id=${team.id}" class="btn btn-info btn-sm">View</a>
+                        <a href="edit-team.html?id=${team.id}" class="btn btn-warning btn-sm">Edit</a>
+                        <button class="btn btn-danger btn-sm" data-type="team" data-id="${team.id}">Delete</button>
+                    </td>
+                `;
+                teamTableBody.appendChild(row);
             });
+        })
+        .catch(err => console.error("Failed to load teams:", err));
 
-        } catch (err) {
-            console.error("Error loading teams:", err);
-        }
-    }
-
-    async function removeTeam(tournamentId, teamId) {
-        if (!confirm("Remove this team from the tournament?")) return;
-
-        try {
-            const res = await fetch(`${API_BASE}/tournaments/${tournamentId}/remove-team/${teamId}`, {
-                method: "DELETE"
-            });
-
-            if (res.ok) {
-                fetchTeams(tournamentId);
-            } else {
-                alert("Failed to remove team.");
+    // Fetch and populate players
+    fetch(`${API_BASE}/players`)
+        .then(res => res.json())
+        .then(async players => {
+            playerTableBody.innerHTML = "";
+            for (const player of players) {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${player.id}</td>
+                    <td>${player.name}</td>
+                    <td>${player.surname}</td>
+                    <td>${player.age}</td>
+                    <td>
+                        <a href="edit-player.html?id=${player.id}" class="btn btn-warning btn-sm">Edit</a>
+                        <button class="btn btn-danger btn-sm" data-type="player" data-id="${player.id}">Delete</button>
+                    </td>
+                `;
+                playerTableBody.appendChild(row);
             }
-        } catch (err) {
-            console.error("Error removing team:", err);
-        }
-    }
-
-    function getTournamentIdFromUrl() {
-        const params = new URLSearchParams(window.location.search);
-        return params.get("id");
-    }
+        })
+        .catch(err => console.error("Failed to load players:", err));
 });

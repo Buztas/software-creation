@@ -1,6 +1,6 @@
 package org.example.pskurimaslab1.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -14,7 +14,7 @@ public class Player {
 
     @ManyToOne
     @JoinColumn(name = "team_id", nullable = false)
-    @JsonIgnore
+    @JsonBackReference
     private Team team;
 
     public Long getId() {

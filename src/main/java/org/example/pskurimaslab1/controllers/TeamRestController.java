@@ -41,13 +41,15 @@ public class TeamRestController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Team> updateTeam(@PathVariable Long id, @RequestBody Team team) {
-        if (teamService.getTeam(id) == null) {
-            return ResponseEntity.notFound().build();
-        }
-        team.setId(id);
-        Team updatedTeam = teamService.updateTeam(team);
-        return ResponseEntity.ok(updatedTeam);
+    public ResponseEntity<Team> updateTeam(@PathVariable Long id, @RequestBody Team incomingTeam) {
+        Team existing = teamService.getTeam(id);
+        if (existing == null) return ResponseEntity.notFound().build();
+
+        existing.setName(incomingTeam.getName());
+        existing.setSport(incomingTeam.getSport());
+
+        Team updated = teamService.updateTeam(existing);
+        return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/{id}")

@@ -68,7 +68,7 @@ public class TournamentRestController {
 
     @DeleteMapping("/{tournamentId}/remove-team/{teamId}")
     public ResponseEntity<Void> removeTeamFromTournament(@PathVariable Long tournamentId, @PathVariable Long teamId) {
-        tournamentService.removeTeamFromTournament(tournamentId, teamId);
+        tournamentService.removeTeamFromTournament(teamId, tournamentId);
         return ResponseEntity.ok().build();
     }
 

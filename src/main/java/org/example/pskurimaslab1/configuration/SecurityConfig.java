@@ -22,10 +22,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // ✅ only this
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.GET, "/api/tournaments/**").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/tournaments/**").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/api/tournaments/**").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/api/tournaments/**").permitAll()
+                        .requestMatchers("/api/tournaments/**").permitAll()
                         .requestMatchers("/api/teams/**").permitAll()
                         .requestMatchers("/api/players/**").permitAll()
                         .anyRequest().authenticated()

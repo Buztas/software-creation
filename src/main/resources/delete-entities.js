@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     document.body.addEventListener("click", async (event) => {
+        const API_BASE = "http://localhost:8080/api";
         const button = event.target.closest(".btn-danger[data-type][data-id]");
         if (!button) return;
 
@@ -13,17 +14,14 @@ document.addEventListener("DOMContentLoaded", () => {
         let apiUrl;
         switch (entityType) {
             case "player":
-                apiUrl = `/api/players/${entityId}`;
+                apiUrl = `${API_BASE}/players/${entityId}`;
                 break;
             case "team":
-                apiUrl = `/api/teams/${entityId}`;
+                apiUrl = `${API_BASE}/teams/${entityId}`;
                 break;
             case "tournament":
-                apiUrl = `/api/tournaments/${entityId}`;
+                apiUrl = `${API_BASE}/tournaments/${entityId}`;
                 break;
-            default:
-                console.error("Unknown entity type:", entityType);
-                return;
         }
 
         try {

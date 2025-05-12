@@ -65,7 +65,6 @@ public class DefaultTournamentService implements TournamentService {
         Team team = teamRepository.findById(teamId).orElse(null);
 
         if (tournament != null && team != null) {
-            // Remove bidirectional relationship
             tournament.getTeams().removeIf(t -> t.getId().equals(teamId));
             team.getTournaments().removeIf(t -> t.getId().equals(tournamentId));
 

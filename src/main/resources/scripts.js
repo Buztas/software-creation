@@ -1,39 +1,82 @@
 document.addEventListener('DOMContentLoaded', () => {
     const API_BASE = 'http://localhost:8080/api';
+    const form = document.getElementById('add-tournament-form');
+    const teamContainer = document.getElementById('team-checkboxes');
 
-    const addTournamentForm = document.querySelector('#add-tournament-form');
+    // Load available teams
+    fetch(`${API_BASE}/teams`)
+        .then(res => res.json())
+        .then(teams => {
+            teams.forEach(team => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'form-check';
 
-    if (addTournamentForm) {
-        addTournamentForm.addEventListener('submit', async function (event) {
-            event.preventDefault();
+                const checkbox = document.createElement('input');
+                checkbox.className = 'form-check-input';
+                checkbox.type = 'checkbox';
+                checkbox.id = `team-${team.id}`;
+                checkbox.value = team.id;
 
-            const tournament = {
-                name: addTournamentForm.name.value,
-                sport: addTournamentForm.sport.value,
-                startDate: addTournamentForm.startDate.value,
-                endDate: addTournamentForm.endDate.value,
-                winner: addTournamentForm.winner.value || null
-            };
+                const label = document.createElement('label');
+                label.className = 'form-check-label';
+                label.htmlFor = checkbox.id;
+                label.textContent = team.name;
 
-            try {
-                const res = await fetch(`${API_BASE}/tournaments`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(tournament)
-                });
-
-                if (res.ok) {
-                    alert('Tournament added successfully!');
-                    window.location.href = '/index.html';
-                } else {
-                    alert('Failed to add tournament.');
-                }
-            } catch (error) {
-                console.error('❌ Error adding tournament:', error);
-                alert('An error occurred while adding the tournament.');
-            }
+                wrapper.appendChild(checkbox);
+                wrapper.appendChild(label);
+                teamContainer.appendChild(wrapper);
+            });
+        })
+        .catch(err => {
+            console.error('Failed to load teams:', err);
+            alert('Could not load teams for selection.');
         });
-    }
+
+    form.addEventListener('submit', async function (event) {
+        event.preventDefault();
+
+        const tournament = {
+            name: form.name.value,
+            sport: form.sport.value,
+            startDate: form.startDate.value,
+            endDate: form.endDate.value,
+            winner: form.winner.value || null
+        };
+
+        try {
+            // Step 1: Create tournament
+            const res = await fetch(`${API_BASE}/tournaments`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(tournament)
+            });
+
+            if (!res.ok) {
+                alert('Failed to add tournament.');
+                return;
+            }
+
+            const newTournament = await res.json();
+
+            // Step 2: Add selected teams
+            const selectedTeamIds = Array.from(
+                teamContainer.querySelectorAll('input[type="checkbox"]:checked')
+            ).map(cb => cb.value);
+
+            await Promise.all(selectedTeamIds.map(teamId =>
+                fetch(`${API_BASE}/tournaments/${newTournament.id}/add-team?teamId=${teamId}`, {
+                    method: 'POST'
+                })
+            ));
+
+            alert('Tournament added successfully with teams!');
+            window.location.href = '/index.html';
+
+        } catch (error) {
+            console.error('❌ Error adding tournament:', error);
+            alert('An error occurred while adding the tournament.');
+        }
+    });
 });
