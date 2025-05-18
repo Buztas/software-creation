@@ -1,7 +1,7 @@
 package org.example.pskurimaslab1.controllers;
 
-import org.example.pskurimaslab1.model.Team;
-import org.example.pskurimaslab1.model.Tournament;
+import org.example.pskurimaslab1.model.dto.TeamDTO;
+import org.example.pskurimaslab1.model.dto.TournamentDTO;
 import org.example.pskurimaslab1.services.TeamService;
 import org.example.pskurimaslab1.services.TournamentService;
 import org.springframework.http.HttpStatus;
@@ -24,37 +24,43 @@ public class TeamRestController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Team>> getAllTeams() {
+    public ResponseEntity<List<TeamDTO>> getAllTeams() {
         return ResponseEntity.ok(teamService.getTeams());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Team> getTeamById(@PathVariable Long id) {
-        Team team = teamService.getTeam(id);
+    public ResponseEntity<TeamDTO> getTeamById(@PathVariable Long id) {
+        TeamDTO team = teamService.getTeam(id);
         return team != null ? ResponseEntity.ok(team) : ResponseEntity.notFound().build();
     }
 
     @PostMapping
-    public ResponseEntity<Team> addTeam(@RequestBody Team team) {
-        Team createdTeam = teamService.addTeam(team);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdTeam);
+    public ResponseEntity<TeamDTO> addTeam(@RequestBody TeamDTO teamDTO) {
+        TeamDTO created = teamService.addTeam(teamDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Team> updateTeam(@PathVariable Long id, @RequestBody Team incomingTeam) {
-        Team existing = teamService.getTeam(id);
+    public ResponseEntity<TeamDTO> updateTeam(@PathVariable Long id, @RequestBody TeamDTO incomingDTO) {
+        TeamDTO existing = teamService.getTeam(id);
         if (existing == null) return ResponseEntity.notFound().build();
 
-        existing.setName(incomingTeam.getName());
-        existing.setSport(incomingTeam.getSport());
+        // Copy over fields you want to update
+        TeamDTO updatedDTO = new TeamDTO(
+                existing.id(),
+                incomingDTO.name(),
+                incomingDTO.sport(),
+                incomingDTO.playerIds(),
+                incomingDTO.tournamentIds()
+        );
 
-        Team updated = teamService.updateTeam(existing);
+        TeamDTO updated = teamService.updateTeam(updatedDTO);
         return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTeam(@PathVariable Long id) {
-        Team team = teamService.getTeam(id);
+        TeamDTO team = teamService.getTeam(id);
         if (team != null) {
             teamService.deleteTeam(team);
             return ResponseEntity.noContent().build();
@@ -63,7 +69,7 @@ public class TeamRestController {
     }
 
     @GetMapping("/{teamId}/tournaments")
-    public ResponseEntity<List<Tournament>> getTournamentsByTeam(@PathVariable Long teamId) {
+    public ResponseEntity<List<TournamentDTO>> getTournamentsByTeam(@PathVariable Long teamId) {
         return ResponseEntity.ok(tournamentService.getTournamentsByTeam(teamId));
     }
 

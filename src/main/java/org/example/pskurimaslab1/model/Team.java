@@ -1,7 +1,7 @@
 package org.example.pskurimaslab1.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -11,20 +11,25 @@ public class Team implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
     private String sport;
 
     @OneToMany(mappedBy = "team", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JsonManagedReference
     private List<Player> players;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {
+            CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH
+    })
     @JoinTable(
             name = "team_tournament",
             joinColumns = @JoinColumn(name = "team_id"),
             inverseJoinColumns = @JoinColumn(name = "tournament_id")
     )
     private List<Tournament> tournaments;
+
+    @Version
+    private Long version;
 
     public Team() {}
 
@@ -42,6 +47,9 @@ public class Team implements Serializable {
 
     public List<Tournament> getTournaments() { return tournaments; }
     public void setTournaments(List<Tournament> tournaments) { this.tournaments = tournaments; }
+
+    public Long getVersion() { return version; }
+    public void setVersion(Long version) { this.version = version; }
 
     @Override
     public String toString() {

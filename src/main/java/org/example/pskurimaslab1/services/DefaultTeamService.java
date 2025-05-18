@@ -1,31 +1,35 @@
 package org.example.pskurimaslab1.services;
 
+import org.example.pskurimaslab1.mapper.TeamMapper;
 import org.example.pskurimaslab1.model.Team;
 import org.example.pskurimaslab1.model.Tournament;
+import org.example.pskurimaslab1.model.dto.TeamDTO;
 import org.example.pskurimaslab1.repositories.TeamRepository;
 import org.example.pskurimaslab1.repositories.TournamentRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
-//TODO: adjust the crud methods
+import java.util.stream.Collectors;
 
 @Service
 public class DefaultTeamService implements TeamService {
 
     private final TeamRepository teamRepository;
     private final TournamentRepository tournamentRepository;
+    private final TeamMapper teamMapper;
 
-    public DefaultTeamService(TeamRepository teamRepository, TournamentRepository tournamentRepository) {
+    public DefaultTeamService(TeamRepository teamRepository, TournamentRepository tournamentRepository, TeamMapper teamMapper) {
         this.teamRepository = teamRepository;
         this.tournamentRepository = tournamentRepository;
+        this.teamMapper = teamMapper;
     }
 
     @Override
     @Transactional
-    public Team addTeam(Team team) {
-        return teamRepository.save(team);
+    public TeamDTO addTeam(TeamDTO dto) {
+        Team team = teamMapper.toEntity(dto);
+        return teamMapper.toDto(teamRepository.save(team));
     }
 
     @Override
@@ -36,35 +40,26 @@ public class DefaultTeamService implements TeamService {
 
     @Override
     @Transactional
-    public void deleteTeam(Team team) {
-        // Unlink from tournaments manually
-        if (team.getTournaments() != null) {
-            for (Tournament tournament : team.getTournaments()) {
-                // Remove from tournament's team list
-                tournament.getTeams().removeIf(t -> t.getId().equals(team.getId()));
+    public void deleteTeam(TeamDTO dto) {
+        Team team = teamMapper.toEntity(dto);
 
-                // Reset winner if this team was the winner
-                if (team.getName().equals(tournament.getWinner())) {
-                    tournament.setWinner(null);
-                }
-            }
-            tournamentRepository.saveAll(team.getTournaments());
+        for (Tournament tournament : team.getTournaments()) {
+            tournament.getTeams().remove(team);
         }
 
-        // Now remove relationships and players
-        teamRepository.removePlayersByTeamId(team.getId());
-        teamRepository.removeTeamTournamentRelationship(team.getId());
-        teamRepository.flush();
+        team.getTournaments().clear();
+        team.getPlayers().forEach(p -> p.setTeam(null));
+        team.getPlayers().clear();
 
-        teamRepository.deleteById(team.getId());
-        teamRepository.flush();
+        teamRepository.save(team);
+        teamRepository.delete(team);
     }
-
 
     @Override
     @Transactional
-    public Team updateTeam(Team team) {
-        return teamRepository.save(team);
+    public TeamDTO updateTeam(TeamDTO dto) {
+        Team team = teamMapper.toEntity(dto);
+        return teamMapper.toDto(teamRepository.save(team));
     }
 
     @Override
@@ -74,17 +69,19 @@ public class DefaultTeamService implements TeamService {
     }
 
     @Override
-    public List<Team> getTeams() {
-        return teamRepository.findAll();
+    public List<TeamDTO> getTeams() {
+        return teamRepository.findAll().stream().map(teamMapper::toDto).collect(Collectors.toList());
     }
 
     @Override
-    public Team getTeam(Long id) {
-        return teamRepository.findById(id).orElse(null);
+    public TeamDTO getTeam(Long id) {
+        return teamMapper.toDto(teamRepository.findById(id).orElse(null));
     }
 
     @Override
-    public List<Team> getTeamsByTournamentId(Long tournamentId) {
-        return teamRepository.findTeamsByTournamentId(tournamentId);
+    public List<TeamDTO> getTeamsByTournamentId(Long tournamentId) {
+        return teamRepository.findTeamsByTournamentId(tournamentId).stream()
+                .map(teamMapper::toDto)
+                .collect(Collectors.toList());
     }
 }

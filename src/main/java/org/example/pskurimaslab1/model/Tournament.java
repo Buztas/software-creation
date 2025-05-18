@@ -1,6 +1,5 @@
 package org.example.pskurimaslab1.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -12,6 +11,7 @@ public class Tournament {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
     private String sport;
 
@@ -23,9 +23,13 @@ public class Tournament {
 
     private String winner;
 
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "tournaments", cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    @JsonIgnore
+    @ManyToMany(mappedBy = "tournaments", fetch = FetchType.EAGER, cascade = {
+            CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH
+    })
     private List<Team> teams;
+
+    @Version
+    private Long version;
 
     public Long getId() {
         return id;
@@ -81,5 +85,13 @@ public class Tournament {
 
     public void setTeams(List<Team> teams) {
         this.teams = teams;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 }

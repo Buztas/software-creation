@@ -1,13 +1,12 @@
 package org.example.pskurimaslab1.controllers;
 
-import org.example.pskurimaslab1.model.Player;
-import org.example.pskurimaslab1.model.Team;
+import org.example.pskurimaslab1.model.dto.PlayerDTO;
 import org.example.pskurimaslab1.services.PlayerService;
-import org.example.pskurimaslab1.services.TeamService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping("/api/players")
@@ -15,52 +14,60 @@ import java.util.List;
 public class PlayerRestController {
 
     private final PlayerService playerService;
-    private final TeamService teamService;
 
-    public PlayerRestController(PlayerService playerService, TeamService teamService) {
+    public PlayerRestController(PlayerService playerService) {
         this.playerService = playerService;
-        this.teamService = teamService;
     }
 
     @GetMapping
-    public List<Player> getAllPlayers() {
-        return playerService.getPlayers();
+    public ResponseEntity<List<PlayerDTO>> getAllPlayers() {
+        return ResponseEntity.ok(playerService.getPlayers());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Player> getPlayerById(@PathVariable Long id) {
-        Player player = playerService.getPlayer(id);
-        if (player != null) {
-            return ResponseEntity.ok(player);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<PlayerDTO> getPlayerById(@PathVariable Long id) {
+        PlayerDTO player = playerService.getPlayer(id);
+        return player != null ? ResponseEntity.ok(player) : ResponseEntity.notFound().build();
     }
 
     @PostMapping
-    public ResponseEntity<Player> addPlayer(@RequestBody Player player) {
-        if (player.getTeam() != null && player.getTeam().getId() != null) {
-            Team team = teamService.getTeam(player.getTeam().getId());
-            player.setTeam(team);
-        }
-        Player savedPlayer = playerService.addPlayer(player);
-        return ResponseEntity.ok(savedPlayer);
+    public ResponseEntity<PlayerDTO> addPlayer(@RequestBody PlayerDTO playerDTO) {
+        PlayerDTO created = playerService.addPlayer(playerDTO);
+        return ResponseEntity.ok(created);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Player> updatePlayer(@PathVariable Long id, @RequestBody Player player) {
-        player.setId(id);
-        if (player.getTeam() != null && player.getTeam().getId() != null) {
-            Team team = teamService.getTeam(player.getTeam().getId());
-            player.setTeam(team);
-        }
-        Player updatedPlayer = playerService.updatePlayer(player);
-        return ResponseEntity.ok(updatedPlayer);
+    public ResponseEntity<PlayerDTO> updatePlayer(@PathVariable Long id, @RequestBody PlayerDTO incomingDTO) {
+        PlayerDTO existing = playerService.getPlayer(id);
+        if (existing == null) return ResponseEntity.notFound().build();
+
+        PlayerDTO updatedDTO = new PlayerDTO(
+                id,
+                incomingDTO.name(),
+                incomingDTO.surname(),
+                incomingDTO.age(),
+                incomingDTO.teamId()
+        );
+
+        PlayerDTO updated = playerService.updatePlayer(updatedDTO);
+        return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePlayer(@PathVariable Long id) {
         playerService.removePlayer(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}/async-update")
+    public CompletableFuture<PlayerDTO> asyncUpdate(@PathVariable Long id, @RequestBody PlayerDTO playerDTO) throws InterruptedException {
+        PlayerDTO updated = new PlayerDTO(
+                id,
+                playerDTO.name(),
+                playerDTO.surname(),
+                playerDTO.age(),
+                playerDTO.teamId()
+        );
+        return playerService.asyncUpdatePlayer(updated);
     }
 }

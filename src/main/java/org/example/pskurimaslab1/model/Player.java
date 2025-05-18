@@ -1,6 +1,5 @@
 package org.example.pskurimaslab1.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 
 @Entity
@@ -8,15 +7,17 @@ public class Player {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String name;
     private String surname;
     private Integer age;
 
     @ManyToOne
-    @JoinColumn(name = "team_id", nullable = false)
-    @JsonBackReference
+    @JoinColumn(name = "team_id")
     private Team team;
 
+    @Version
+    private Long version;
     public Long getId() {
         return id;
     }
@@ -55,5 +56,13 @@ public class Player {
 
     public void setTeam(Team team) {
         this.team = team;
+    }
+
+    public Long getVersion() {
+        return version;
+    }
+
+    public void setVersion(Long version) {
+        this.version = version;
     }
 }

@@ -1,7 +1,7 @@
 package org.example.pskurimaslab1.controllers;
 
-import org.example.pskurimaslab1.model.Team;
-import org.example.pskurimaslab1.model.Tournament;
+import org.example.pskurimaslab1.model.dto.TeamDTO;
+import org.example.pskurimaslab1.model.dto.TournamentDTO;
 import org.example.pskurimaslab1.services.TeamService;
 import org.example.pskurimaslab1.services.TournamentService;
 import org.springframework.http.ResponseEntity;
@@ -24,39 +24,52 @@ public class TournamentRestController {
     }
 
     @GetMapping
-    public List<Tournament> getAllTournaments() {
+    public List<TournamentDTO> getAllTournaments() {
         return tournamentService.getTournaments();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Tournament> getTournamentById(@PathVariable Long id) {
-        Tournament tournament = tournamentService.getTournament(id);
+    public ResponseEntity<TournamentDTO> getTournamentById(@PathVariable Long id) {
+        TournamentDTO tournament = tournamentService.getTournament(id);
         return tournament != null ? ResponseEntity.ok(tournament) : ResponseEntity.notFound().build();
     }
 
     @PostMapping(produces = "application/json")
-    public @ResponseBody Tournament addTournament(@RequestBody Tournament tournament) {
-        return tournamentService.addTournament(tournament);
+    public ResponseEntity<TournamentDTO> addTournament(@RequestBody TournamentDTO tournamentDTO) {
+        TournamentDTO created = tournamentService.addTournament(tournamentDTO);
+        return ResponseEntity.ok(created);
     }
 
     @PutMapping(value = "/{id}", consumes = "application/json", produces = "application/json")
-    public ResponseEntity<Tournament> updateTournament(@PathVariable Long id, @RequestBody Tournament tournament) {
-        tournament.setId(id);
-        Tournament updated = tournamentService.updateTournament(tournament);
+    public ResponseEntity<TournamentDTO> updateTournament(@PathVariable Long id, @RequestBody TournamentDTO incomingDTO) {
+        TournamentDTO existing = tournamentService.getTournament(id);
+        if (existing == null) return ResponseEntity.notFound().build();
+
+        TournamentDTO toUpdate = new TournamentDTO(
+                id,
+                incomingDTO.name(),
+                incomingDTO.sport(),
+                incomingDTO.startDate(),
+                incomingDTO.endDate(),
+                incomingDTO.winner(),
+                incomingDTO.teamIds()
+        );
+
+        TournamentDTO updated = tournamentService.updateTournament(toUpdate);
         return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTournament(@PathVariable Long id) {
-        Tournament tournament = tournamentService.getTournament(id);
+        TournamentDTO tournament = tournamentService.getTournament(id);
         if (tournament != null) {
-            tournamentService.removeFromTournament(tournament);
+            tournamentService.deleteTournament(tournament);
         }
         return ResponseEntity.noContent().build();
     }
 
     @GetMapping("/{tournamentId}/teams")
-    public List<Team> getTeamsByTournament(@PathVariable Long tournamentId) {
+    public List<TeamDTO> getTeamsByTournament(@PathVariable Long tournamentId) {
         return teamService.getTeamsByTournamentId(tournamentId);
     }
 
@@ -68,27 +81,28 @@ public class TournamentRestController {
 
     @DeleteMapping("/{tournamentId}/remove-team/{teamId}")
     public ResponseEntity<Void> removeTeamFromTournament(@PathVariable Long tournamentId, @PathVariable Long teamId) {
-        tournamentService.removeTeamFromTournament(teamId, tournamentId);
+        tournamentService.removeTeamFromTournament(tournamentId, teamId);
         return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{tournamentId}/available-teams")
-    public ResponseEntity<List<Team>> getAvailableTeams(@PathVariable Long tournamentId) {
-        Tournament tournament = tournamentService.getTournament(tournamentId);
+    public ResponseEntity<List<TeamDTO>> getAvailableTeams(@PathVariable Long tournamentId) {
+        TournamentDTO tournament = tournamentService.getTournament(tournamentId);
         if (tournament == null) {
             return ResponseEntity.notFound().build();
         }
 
-        List<Team> allTeams = teamService.getTeams().stream()
-                .filter(team -> team.getTournaments().stream()
-                        .noneMatch(existingTournament -> isConflicting(tournament, existingTournament)))
+        List<TeamDTO> allTeams = teamService.getTeams().stream()
+                .filter(team -> team.tournamentIds().stream()
+                        .map(tournamentService::getTournament)
+                        .noneMatch(existing -> isConflicting(tournament, existing)))
                 .collect(Collectors.toList());
 
         return ResponseEntity.ok(allTeams);
     }
 
-    private boolean isConflicting(Tournament newTournament, Tournament existingTournament) {
-        return !(newTournament.getEndDate().before(existingTournament.getStartDate()) ||
-                newTournament.getStartDate().after(existingTournament.getEndDate()));
+    private boolean isConflicting(TournamentDTO newTournament, TournamentDTO existingTournament) {
+        return !(newTournament.endDate().before(existingTournament.startDate()) ||
+                newTournament.startDate().after(existingTournament.endDate()));
     }
 }

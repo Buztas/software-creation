@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const surnameInput = document.getElementById("surname");
     const ageInput = document.getElementById("age");
     const teamSelect = document.getElementById("team");
+    const versionInput = document.getElementById("version"); // ✅ reference to version input
 
     if (!playerId) {
         alert("Missing player ID in URL.");
@@ -41,13 +42,14 @@ document.addEventListener("DOMContentLoaded", () => {
             surnameInput.value = player.surname;
             ageInput.value = player.age;
             teamSelect.value = player.team?.id || "";
+            versionInput.value = player.version; // ✅ set version
         })
         .catch(err => {
             console.error("Error loading player:", err);
             alert("Could not load player data.");
         });
 
-    // Handle form submission
+    // Handle form submission (synchronous update)
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
@@ -56,6 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
             name: nameInput.value,
             surname: surnameInput.value,
             age: parseInt(ageInput.value),
+            version: parseInt(versionInput.value), // ✅ include version
             team: {
                 id: parseInt(teamSelect.value)
             }
@@ -74,10 +77,43 @@ document.addEventListener("DOMContentLoaded", () => {
                 alert("Player updated successfully.");
                 window.location.href = "/index.html";
             } else {
-                alert("Failed to update player.");
+                const errorText = await res.text();
+                alert("Failed to update player: " + errorText);
             }
         } catch (err) {
             console.error("Update error:", err);
+        }
+    });
+
+    document.getElementById("async-update-btn").addEventListener("click", async () => {
+        const updatedPlayer = {
+            id: playerId,
+            name: nameInput.value,
+            surname: surnameInput.value,
+            age: parseInt(ageInput.value),
+            version: parseInt(versionInput.value),
+            team: {
+                id: parseInt(teamSelect.value)
+            }
+        };
+
+        try {
+            const res = await fetch(`${API_BASE}/players/${playerId}/async-update`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(updatedPlayer)
+            });
+
+            if (res.ok) {
+                alert("Async update started. It may take a few seconds.");
+            } else {
+                const errorText = await res.text();
+                alert("Async update failed: " + errorText);
+            }
+        } catch (err) {
+            console.error("Async update error:", err);
         }
     });
 });
