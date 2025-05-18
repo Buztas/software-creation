@@ -20,6 +20,10 @@
             <h:outputText value="#{tournament.name}" />
         </h:column>
         <h:column>
+            <f:facet name="header">Teams in tournament</f:facet>
+            <h:outputText value="#{tournamentBean.getTeamsInTournament(tournament)}"/>
+        </h:column>
+        <h:column>
             <f:facet name="header">Actions</f:facet>
             <h:link value="View" outcome="tournament-details.xhtml">
                 <f:param name="tournamentId" value="#{tournament.id}" />

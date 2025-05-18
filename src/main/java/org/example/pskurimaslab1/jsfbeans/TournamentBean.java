@@ -64,6 +64,10 @@ public class TournamentBean implements Serializable {
         }
     }
 
+    public int getTeamsInTournament(Tournament tournament) {
+        return tournamentService.getTournament(tournament.getId()).getTeams().size();
+    }
+
     public Tournament getTournament() {
         return tournament;
     }
