@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
     document.body.addEventListener("click", async (event) => {
-        const API_BASE = "http://localhost:8080/api";
+        const API_BASE = "http://localhost:8081/api";
         const button = event.target.closest(".btn-danger[data-type][data-id]");
         if (!button) return;
 

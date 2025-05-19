@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const API_BASE = "http://localhost:8080/api";
+    const API_BASE = "http://localhost:8081/api";
     const urlParams = new URLSearchParams(window.location.search);
     const playerId = urlParams.get("id");
 
@@ -8,14 +8,13 @@ document.addEventListener("DOMContentLoaded", () => {
     const surnameInput = document.getElementById("surname");
     const ageInput = document.getElementById("age");
     const teamSelect = document.getElementById("team");
-    const versionInput = document.getElementById("version"); // ✅ reference to version input
+    const versionInput = document.getElementById("player-version");
 
     if (!playerId) {
         alert("Missing player ID in URL.");
         return;
     }
 
-    // Load teams into the select dropdown
     fetch(`${API_BASE}/teams`)
         .then(res => res.json())
         .then(teams => {
@@ -31,7 +30,6 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("Could not load teams.");
         });
 
-    // Load existing player data
     fetch(`${API_BASE}/players/${playerId}`)
         .then(res => {
             if (!res.ok) throw new Error("Player not found");
@@ -42,14 +40,13 @@ document.addEventListener("DOMContentLoaded", () => {
             surnameInput.value = player.surname;
             ageInput.value = player.age;
             teamSelect.value = player.team?.id || "";
-            versionInput.value = player.version; // ✅ set version
+            versionInput.value = player.version;
         })
         .catch(err => {
             console.error("Error loading player:", err);
             alert("Could not load player data.");
         });
 
-    // Handle form submission (synchronous update)
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
@@ -58,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
             name: nameInput.value,
             surname: surnameInput.value,
             age: parseInt(ageInput.value),
-            version: parseInt(versionInput.value), // ✅ include version
+            version: parseInt(versionInput.value),
             team: {
                 id: parseInt(teamSelect.value)
             }

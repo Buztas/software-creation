@@ -1,11 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const API_BASE = "http://localhost:8080/api";
+    const API_BASE = "http://localhost:8081/api";
 
     const tournamentTableBody = document.getElementById("tournament-table-body");
     const teamTableBody = document.getElementById("team-table-body");
     const playerTableBody = document.getElementById("player-table-body");
 
-    // Fetch and populate tournaments
     fetch(`${API_BASE}/tournaments`)
         .then(res => res.json())
         .then(tournaments => {
@@ -29,7 +28,6 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .catch(err => console.error("Failed to load tournaments:", err));
 
-    // Fetch and populate teams
     fetch(`${API_BASE}/teams`)
         .then(res => res.json())
         .then(teams => {
@@ -51,7 +49,6 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .catch(err => console.error("Failed to load teams:", err));
 
-    // Fetch and populate players
     fetch(`${API_BASE}/players`)
         .then(res => res.json())
         .then(async players => {

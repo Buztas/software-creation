@@ -1,9 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const API_BASE = 'http://localhost:8080/api';
+    const API_BASE = 'http://localhost:8081/api';
     const form = document.getElementById('add-tournament-form');
     const teamContainer = document.getElementById('team-checkboxes');
 
-    // Load available teams
     fetch(`${API_BASE}/teams`)
         .then(res => res.json())
         .then(teams => {
@@ -44,7 +43,6 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         try {
-            // Step 1: Create tournament
             const res = await fetch(`${API_BASE}/tournaments`, {
                 method: 'POST',
                 headers: {
@@ -60,7 +58,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const newTournament = await res.json();
 
-            // Step 2: Add selected teams
             const selectedTeamIds = Array.from(
                 teamContainer.querySelectorAll('input[type="checkbox"]:checked')
             ).map(cb => cb.value);

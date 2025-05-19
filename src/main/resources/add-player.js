@@ -1,9 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const API_BASE = "http://localhost:8080/api";
+    const API_BASE = "http://localhost:8081/api";
     const form = document.getElementById("add-player-form");
     const teamSelect = document.getElementById("team");
 
-    // Load teams into dropdown
     fetch(`${API_BASE}/teams`)
         .then(res => res.json())
         .then(teams => {
@@ -19,7 +18,6 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("Could not load teams. Please try again.");
         });
 
-    // Handle form submission
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
 

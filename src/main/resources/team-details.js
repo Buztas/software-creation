@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const API_BASE = "http://localhost:8080/api";
+    const API_BASE = "http://localhost:8081/api";
     const teamId = new URLSearchParams(window.location.search).get("id");
 
     const teamIdSpan = document.getElementById("team-id");
@@ -13,7 +13,6 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
     }
 
-    // Fetch team details (including players)
     fetch(`${API_BASE}/teams/${teamId}`)
         .then(res => res.json())
         .then(team => {
@@ -38,7 +37,6 @@ document.addEventListener("DOMContentLoaded", () => {
             alert("Could not load team data.");
         });
 
-    // Fetch tournaments associated with the team
     fetch(`${API_BASE}/teams/${teamId}/tournaments`)
         .then(res => res.json())
         .then(tournaments => {

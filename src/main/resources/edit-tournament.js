@@ -1,11 +1,12 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const API_BASE = "http://localhost:8080/api";
+    const API_BASE = "http://localhost:8081/api";
     const tournamentId = getTournamentIdFromUrl();
     const form = document.getElementById("edit-tournament-form");
     const teamList = document.getElementById("tournament-teams");
     const deleteBtn = document.getElementById("delete-tournament");
     const availableTeamContainer = document.getElementById("available-teams-checkboxes");
     const addTeamsBtn = document.getElementById("add-teams-btn");
+    const versionInput = document.getElementById("tournament-version");
 
     if (!tournamentId) {
         alert("Tournament ID is missing from the URL.");
@@ -16,7 +17,6 @@ document.addEventListener("DOMContentLoaded", () => {
     fetchTeams(tournamentId);
     fetchAvailableTeams(tournamentId);
 
-    // Update tournament
     form.addEventListener("submit", async (e) => {
         e.preventDefault();
 
@@ -26,7 +26,8 @@ document.addEventListener("DOMContentLoaded", () => {
             sport: form.sport.value,
             startDate: form.startDate.value,
             endDate: form.endDate.value,
-            winner: form.winner.value
+            winner: form.winner.value,
+            version: parseInt(versionInput.value)
         };
 
         try {
@@ -48,7 +49,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Delete tournament
     deleteBtn.addEventListener("click", async () => {
         if (!confirm("Are you sure you want to delete this tournament?")) return;
 
@@ -68,7 +68,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Add selected teams
     addTeamsBtn.addEventListener("click", async () => {
         const selectedIds = Array.from(
             availableTeamContainer.querySelectorAll("input[type='checkbox']:checked")
@@ -89,7 +88,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Load tournament data
     async function fetchTournament(id) {
         try {
             const res = await fetch(`${API_BASE}/tournaments/${id}`);
@@ -101,12 +99,12 @@ document.addEventListener("DOMContentLoaded", () => {
             form.startDate.value = data.startDate?.slice(0, 10) || "";
             form.endDate.value = data.endDate?.slice(0, 10) || "";
             form.winner.value = data.winner || "";
+            versionInput.value = data.version;
         } catch (err) {
             console.error("Error fetching tournament:", err);
         }
     }
 
-    // Load current teams
     async function fetchTeams(id) {
         try {
             const res = await fetch(`${API_BASE}/tournaments/${id}/teams`);
@@ -141,7 +139,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // Remove a team
     async function removeTeam(tournamentId, teamId) {
         if (!confirm("Remove this team from the tournament?")) return;
 
@@ -163,7 +160,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    // Load available teams
     async function fetchAvailableTeams(tournamentId) {
         try {
             const res = await fetch(`${API_BASE}/tournaments/${tournamentId}/available-teams`);
