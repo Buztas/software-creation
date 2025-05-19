@@ -45,13 +45,13 @@ public class TeamRestController {
         TeamDTO existing = teamService.getTeam(id);
         if (existing == null) return ResponseEntity.notFound().build();
 
-        // Copy over fields you want to update
         TeamDTO updatedDTO = new TeamDTO(
                 existing.id(),
                 incomingDTO.name(),
                 incomingDTO.sport(),
                 incomingDTO.playerIds(),
-                incomingDTO.tournamentIds()
+                incomingDTO.tournamentIds(),
+                incomingDTO.version()
         );
 
         TeamDTO updated = teamService.updateTeam(updatedDTO);

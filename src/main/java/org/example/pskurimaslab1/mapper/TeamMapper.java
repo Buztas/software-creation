@@ -12,13 +12,14 @@ import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring", uses = { TournamentIdResolver.class, PlayerIdResolver.class })
 public interface TeamMapper {
-
     @Mapping(target = "playerIds", expression = "java(mapPlayerIds(team))")
     @Mapping(target = "tournamentIds", expression = "java(mapTournamentIds(team))")
+    @Mapping(source = "version", target = "version")
     TeamDTO toDto(Team team);
 
     @Mapping(source = "playerIds", target = "players", qualifiedByName = "fromIds")
     @Mapping(source = "tournamentIds", target = "tournaments", qualifiedByName = "fromIds")
+    @Mapping(source = "version", target = "version")
     Team toEntity(TeamDTO dto);
 
     default List<Long> mapPlayerIds(Team team) {

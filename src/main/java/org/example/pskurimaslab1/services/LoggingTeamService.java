@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Primary
+// CDI Specialized
 public class LoggingTeamService implements TeamService {
 
     private final TeamRepository teamRepository;
@@ -75,7 +76,7 @@ public class LoggingTeamService implements TeamService {
 
         team.getPlayers().clear();
 
-        teamRepository.save(team); // persist relationship changes
+        teamRepository.save(team);
         teamRepository.delete(team);
 
         logger.info("Team deleted successfully: ID=" + team.getId());

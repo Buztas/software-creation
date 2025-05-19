@@ -46,7 +46,8 @@ public class PlayerRestController {
                 incomingDTO.name(),
                 incomingDTO.surname(),
                 incomingDTO.age(),
-                incomingDTO.teamId()
+                incomingDTO.teamId(),
+                incomingDTO.version()
         );
 
         PlayerDTO updated = playerService.updatePlayer(updatedDTO);
@@ -66,7 +67,8 @@ public class PlayerRestController {
                 playerDTO.name(),
                 playerDTO.surname(),
                 playerDTO.age(),
-                playerDTO.teamId()
+                playerDTO.teamId(),
+                playerDTO.version()
         );
         return playerService.asyncUpdatePlayer(updated);
     }

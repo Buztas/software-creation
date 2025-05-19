@@ -10,5 +10,6 @@ public record TournamentDTO(
         Date startDate,
         Date endDate,
         String winner,
-        List<Long> teamIds
+        List<Long> teamIds,
+        Long version
 ) {}

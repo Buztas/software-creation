@@ -52,7 +52,8 @@ public class TournamentRestController {
                 incomingDTO.startDate(),
                 incomingDTO.endDate(),
                 incomingDTO.winner(),
-                incomingDTO.teamIds()
+                incomingDTO.teamIds(),
+                incomingDTO.version()
         );
 
         TournamentDTO updated = tournamentService.updateTournament(toUpdate);

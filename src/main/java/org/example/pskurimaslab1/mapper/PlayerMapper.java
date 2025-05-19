@@ -9,10 +9,10 @@ import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring", uses = { TeamIdResolver.class })
 public interface PlayerMapper {
-
     @Mapping(source = "team.id", target = "teamId")
     PlayerDTO toDto(Player player);
 
     @Mapping(source = "teamId", target = "team", qualifiedByName = "fromId")
+    @Mapping(source = "version", target = "version")
     Player toEntity(PlayerDTO dto);
 }

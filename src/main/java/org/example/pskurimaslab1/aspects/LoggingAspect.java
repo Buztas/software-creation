@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Aspect
 @Component
+// CDI Interceptor
 public class LoggingAspect {
     @Before("execution(* org.example.pskurimaslab1.services.TeamService.*(..))")
     public void logBefore(JoinPoint joinPoint) {

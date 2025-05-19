@@ -7,5 +7,6 @@ public record TeamDTO(
         String name,
         String sport,
         List<Long> playerIds,
-        List<Long> tournamentIds
+        List<Long> tournamentIds,
+        Long version
 ) {}

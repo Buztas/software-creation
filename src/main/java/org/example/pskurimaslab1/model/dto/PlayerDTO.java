@@ -5,5 +5,6 @@ public record PlayerDTO(
         String name,
         String surname,
         Integer age,
-        Long teamId
+        Long teamId,
+        Long version
 ) {}
